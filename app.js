@@ -16,12 +16,8 @@ app.configure(function() {
   app.set('application_root', application_root);
 });
 
-app.get('/', function(req, res) {
-  res.send("Welcome to Chatbox.");
-});
-
 require('./controllers/chats')(app);
-require('./controllers/auth')(app, client);
+require('./controllers/misc')(app, client);
 
 app.listen(3000);
 console.log("Listening on port 3000.");
