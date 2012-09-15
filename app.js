@@ -1,8 +1,13 @@
-var application_root = __dirname,
-express   = require('express'),
-cons      = require('consolidate'),
-path      = require('path');
-var app = express();
+var application_root = __dirname;
+var express   = require('express');
+var cons      = require('consolidate');
+var path      = require('path');
+var Dropbox   = require('dropbox');
+var client    = new Dropbox.Client({
+  key: "6bfefmqtp7vnsyh", secret: "85865zcxurydsaw"
+});
+client.authDriver(new Dropbox.Drivers.NodeServer(8191));
+var app       = express();
 
 app.configure(function() {
   app.engine('html', cons.handlebars);
@@ -16,6 +21,7 @@ app.get('/', function(req, res) {
 });
 
 require('./controllers/chats')(app);
+require('./controllers/auth')(app, client);
 
 app.listen(3000);
 console.log("Listening on port 3000.");
