@@ -17,6 +17,11 @@ a {
   height: 100%;
 }
 
+.main.pane {
+  left: 200px;
+  position: absolute;
+}
+
 #conversationsPane {
   border-right: 1px solid #666;
   position: fixed;
@@ -36,6 +41,16 @@ a {
 #logo {
   margin: 15px 20px;
   width: 160px;
+}
+
+a#addConversation {
+  color: #06799f;
+  font-size: 12px;
+  margin-left: 20px;
+}
+
+a#addConversation:hover {
+  text-decoration: underline;
 }
 
 #conversations {
@@ -75,24 +90,59 @@ a {
 
 /*----------------------------*/
 
-#chatPane {
-  margin-left: 200px;
-}
-
-.chats {
+#chats {
   padding: 0 10px;
 }
 
-.chats .msg {
+#chats .msg {
   border-bottom: 1px solid #eee;
   display: block;
   margin-left: -5px;
   padding: 10px;
 }
 
-.chats .msg .author {
+#chats .msg .author {
   font-weight: 700;
   margin-right: 5px;
+}
+
+/*----------------------------*/
+
+#addConversationPane {
+  display: none;
+  text-align: center;
+}
+
+#addConversationPane h2 {
+  font-size: 24px;
+  margin: 30px 0 20px;
+}
+
+#addConversationPane input {
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  font-size: 16px;
+  padding: 10px 15px;
+}
+
+#addConversationPane input[type=text] {
+  margin-right: 10px;
+  width: 400px;
+}
+
+#addConversationPane input[type=text]:focus {
+  border-color: #333;
+}
+
+#addConversationPane input[type=submit] {
+  background: #fff;
+}
+
+#addConversationPane input[type=submit]:hover {
+  background: #06799f;
+  border-color: #333;
+  color: #fff;
+  cursor: pointer;
 }
 
 /*----------------------------*/

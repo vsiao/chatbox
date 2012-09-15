@@ -12,6 +12,7 @@ dropboxdb.connect({
 });
 
 app.configure(function() {
+  app.use(express.bodyParser());
   app.use(express.static(path.join(application_root, "public")));
   app.engine('html', cons.handlebars);
   app.set('views', path.join(application_root, "views"));

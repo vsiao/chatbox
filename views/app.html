@@ -10,6 +10,7 @@
 <div id="chatboxApp">
   <div id="conversationsPane" class="pane">
     <img id="logo" src="dropboxlogo.png" />
+    <a href="#" id="addConversation">+ Add a Conversation</a>
     <ul id="conversations">
     </ul>
     <div class="footer">
@@ -17,7 +18,17 @@
     nrchu | vsiao | phx | jyan
     </div>
   </div>
-  <div id="chatPane" class="pane">
+  <div id="noConversationPane" class="main pane">
+  </div>
+  <div id="addConversationPane" class="main pane">
+    <h2>Name your new chat.</h2>
+    <form id="addConversationForm">
+      <input type="text" id="conversationNameInput"
+        placeholder="DropboxDB Team" />
+      <input type="submit" value="Create" />
+    </form>
+  </div>
+  <div id="chatPane" class="main pane">
     <ul id="chats"></ul>
     <div id="chatInput">
       <textarea></textarea>
@@ -32,19 +43,20 @@ $(function() {
   var CONVERSATIONS_PANE_WIDTH = 200;
   var OPTIONS_PANE_WIDTH = 180;
 
-  var $chatPane = $('#chatPane');
+  var $mainPanes = $('.main.pane');
   var $chatInput = $('#chatInput');
   var $chatInputTextarea = $('#chatInput textarea');
 
   $(window).resize(function() {
     var newWidth = $(this).width() -
       CONVERSATIONS_PANE_WIDTH - OPTIONS_PANE_WIDTH;
-    $chatPane.width(newWidth + 'px');
+    $mainPanes.width(newWidth + 'px');
     $chatInput.width(newWidth - 40 + 'px');
   });
   $(window).resize();
 });
 </script>
+<script src="http://cloud.github.com/downloads/wycats/handlebars.js/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
 <script src="http://underscorejs.org/underscore.js" type="text/javascript"></script>
 <script src="http://backbonejs.org/backbone.js" type="text/javascript"></script>
 <script src="/js/app.js" type="text/javascript"></script>

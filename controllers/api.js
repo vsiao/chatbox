@@ -25,5 +25,16 @@ module.exports = function(app, dropboxdb) {
     );
   });
 
-
+  /** Creates a new chat */
+  app.post('/api/create', function(req, res) {
+    dropboxdb.create(
+      'chatbox-' + req.body.name,
+      null,
+      function() {}
+    );
+    res.send({status: 200, data: {
+      name: req.body.name
+      /* TODO give permalink back here */
+    }});
+  });
 }
