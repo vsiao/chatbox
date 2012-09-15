@@ -5,7 +5,10 @@ module.exports = function(app, dropboxdb) {
         res.render('index', {msg: 'You\'re a fuck up.'});
       } else {
         dropboxdb.create("chats", {}, function(){});
-        res.render('index', {msg: 'You authenticated!!'});
+        dropboxdb.userInfo(function(userInfo) {
+          console.log(userInfo);
+          res.render('app', userInfo);
+        });
       }
     });
   });
