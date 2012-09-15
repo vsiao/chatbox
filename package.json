@@ -21,7 +21,8 @@
     "url": "https://github.com/vincentsiao/chatbox.git"
   },
   "dependencies": {
-    "express": "3.x"
+    "express": "3.x",
+    "dropbox": "0.6.x"
   },
   "engines": {
     "node": ">=0.8",
