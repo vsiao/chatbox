@@ -6,8 +6,8 @@ var dropboxdb = require('dropboxdb');
 var app       = express();
 
 dropboxdb.connect({
-  key: '6bfefmqtp7vnsyh',
-  secret: '85865zcxurydsaw'
+  key: 'an9xqcu05kyjbir',
+  secret: 'xgtmq9wcshbt7lh'
 });
 
 app.configure(function() {
