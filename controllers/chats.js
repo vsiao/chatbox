@@ -1,8 +1,8 @@
 module.exports = function(app) {
-  app.get('/chat/', function(req, res) {
+  app.get('/chats', function(req, res) {
     var data = {
       message: "CHAT"
     };
-    res.render('chat/display', data); 
+    res.render('chats/display', data); 
   });
 };

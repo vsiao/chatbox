@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
   res.send("Welcome to Chatbox.");
 });
 
-require('./controllers/chat')(app);
+require('./controllers/chats')(app);
 
 app.listen(3000);
 console.log("Listening on port 3000.");
