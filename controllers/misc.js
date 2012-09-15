@@ -4,7 +4,7 @@ module.exports = function(app, client) {
       if(error) {
         return "Error.";
       }
-      
+      res.render('index');      
     });
   });
 }
