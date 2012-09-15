@@ -1,10 +1,11 @@
-module.exports = function(app, client) {
+module.exports = function(app, dropboxdb) {
   app.get('/', function(req, res) {
-    client.authenticate(function(error, client) {
-      if(error) {
-        return "Error.";
+    dropboxdb.authenticate(function(error) {
+      if (error) {
+        res.render('index', {msg: 'You\'re a fuck up.'});
+      } else {
+        res.render('index', {msg: 'You authenticated!!'});
       }
-      res.render('index');      
     });
   });
 }
