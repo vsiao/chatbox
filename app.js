@@ -18,6 +18,7 @@ app.configure(function() {
 });
 
 require('./controllers/misc')(app, dropboxdb);
+require('./controllers/api')(app, dropboxdb);
 
 app.listen(3000);
 console.log("Listening on port 3000.");
