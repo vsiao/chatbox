@@ -7,7 +7,9 @@ module.exports = function(app) {
         res.render('index', {msg: 'You\'re a fuck up.'});
       } else {
         dropboxdb.userInfo(function(userInfo) {
-          res.render('app', userInfo);
+          var data = userInfo;
+          data.conversations = [];
+          res.render('app', data);
         });
       }
     });

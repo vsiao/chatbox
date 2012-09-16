@@ -46,7 +46,7 @@ a {
 a#addConversation {
   color: #06799f;
   font-size: 12px;
-  margin-left: 20px;
+  margin-left: 25px;
 }
 
 a#addConversation:hover {
@@ -55,6 +55,7 @@ a#addConversation:hover {
 
 #conversations {
   margin-left: 20px;
+  margin-top: 10px;
 }
 
 #conversations a {

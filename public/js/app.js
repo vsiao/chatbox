@@ -3,16 +3,23 @@ var chats = new Backbone.Collection();
 var ChatboxApp = Backbone.View.extend({
   el: $('#chatboxApp'),
   events: {
-    'click #addConversation': 'showAdd'
+    'click #addConversation': 'showAdd',
+    'click #conversations a': 'showChat'
   },
   initialize: function(options) {
     this.$('#optionsPane').append('Logged in as ' + options.name);
+    this.chatPane = new ChatPane({collection: chats});
     new ConversationsList({collection: chats});
     new AddConversation();
   },
   showAdd: function() {
     this.$('.main.pane').fadeOut(300);
     this.$('#addConversationPane').fadeIn(300);
+  },
+  showChat: function(event) {
+    //this.chatPane.activate($(event.target).data('cid'));
+    this.$('.main.pane').fadeOut(300);
+    this.$('#chatPane').fadeIn(300);
   }
 });
 
@@ -56,4 +63,9 @@ var AddConversation = Backbone.View.extend({
     });
     event.preventDefault();
   }
+});
+
+var ChatPane = Backbone.View.extend({
+  el: $('#chatPane')
+
 });
