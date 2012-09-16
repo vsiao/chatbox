@@ -1,4 +1,6 @@
-module.exports = function(app, dropboxdb) {
+module.exports = function(app) {
+  var dropboxdb = require('dropboxdb');
+
   var chatsTable = "chats";
   var name;
   var email;

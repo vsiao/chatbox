@@ -35,8 +35,8 @@ handlebars.registerHelper("block", function (name, options) {
   return partial(this, { data : options.hash });
 });
 
-require('./controllers/misc')(app, dropboxdb);
-require('./controllers/api')(app, dropboxdb);
+require('./controllers/misc')(app);
+require('./controllers/api')(app);
 
 app.listen(3000);
 console.log("Listening on port 3000.");

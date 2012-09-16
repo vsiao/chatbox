@@ -1,4 +1,6 @@
-module.exports = function(app, dropboxdb) {
+module.exports = function(app) {
+  var dropboxdb = require('dropboxdb');
+
   app.get('/', function(req, res) {
     dropboxdb.authenticate(function(error) {
       if (error) {
