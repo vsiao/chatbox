@@ -2,19 +2,59 @@ var Message = Backbone.Model.extend({
 });
 
 var Messages = Backbone.Collection.extend({
-  fetch: function() {
+  comparator: function(a, b) {
+    var m1 = a.get('ID');
+    var m2 = b.get('ID');
+    if (m1 > m2) {
+      return 1;
+    } else if (m1 < m2) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 });
 
 var Chat = Backbone.Model.extend({
   initialize: function(attributes) {
     this.messages = new Messages();
+  },
+  fetch: function() {
+    var ths = this;
+    $.ajax({
+      type: 'GET',
+      url: '/api/get/' + this.get('name') + '/all',
+      error: function(jqXHR) {
+        debugger;
+      },
+      success: function(data) {
+        ths.messages.reset(data);
+      }
+    });
+  },
+  getMore: function() {
+    var ths = this;
+    debugger;
+    $.ajax({
+      type: 'GET',
+      url: '/api/get/' + this.get('name') + '/since/' +
+        this.messages.last().get('ID'),
+      error: function(jqXHR) {
+        debugger;
+      },
+      success: function(data) {
+        ths.messages.add(data);
+      }
+    });
   }
 });
 
 var Chats = Backbone.Collection.extend({
   model: Chat,
   activeCid: null,
+  initialize: function() {
+    this.poll();
+  },
   setActiveCid: function(cid) {
     if (this.activeCid) {
       this.getActive().set('active', false);
@@ -25,6 +65,20 @@ var Chats = Backbone.Collection.extend({
   },
   getActive: function() {
     return this.getByCid(this.activeCid);
+  },
+  poll: function() {
+    var ths = this;
+    if (this.activeCid) {
+      var activeChat = this.getActive();
+      if (activeChat.messages.length) {
+        activeChat.getMore();
+      } else {
+        activeChat.fetch();
+      }
+    }
+    setTimeout(function() {
+      ths.poll();
+    }, 500);
   }
 });
 var chats = new Chats();
@@ -43,13 +97,13 @@ var ChatboxApp = Backbone.View.extend({
     new AddConversation();
   },
   showAdd: function() {
-    this.$('.main.pane').fadeOut(300);
-    this.$('#addConversationPane').fadeIn(300);
+    this.$('.main.pane').hide();
+    this.$('#addConversationPane').hide();
   },
   showChat: function(event) {
     chats.setActiveCid($(event.target).data('cid'));
-    this.$('.main.pane').fadeOut(300);
-    this.$('#chatPane').stop(true, true).fadeIn(300);
+    this.$('.main.pane').hide();
+    this.$('#chatPane').show();
   }
 });
 
@@ -111,16 +165,21 @@ var ChatPane = Backbone.View.extend({
     this.author = options.name;
     this.collection.on('active:set', this.swapChat, this);
     this.chatsViewCollection = new Messages();
-    this.chatsView = new ChatsView({collection: this.chatsViewCollection});
+    this.chatViews = {};
     this.$input = this.$('#chatInput textarea');
     /* FIXME NO ACTIVE CHAT SHH */
   },
   swapChat: function(activeChat) {
-    this.chatsViewCollection.reset();
+    if (this.activeChat) {
+      this.chatViews[this.activeChat.cid].$el.hide();
+    }
     this.activeChat = activeChat;
-    var msgs = activeChat.messages.fetch(function(msgs) {
-      this.chatsViewCollection.reset(msgs);
-    });
+    if (!this.chatViews.hasOwnProperty(activeChat.cid)) {
+      this.chatViews[activeChat.cid] =
+        new ChatsView({collection: activeChat.messages});
+      this.chatViews[activeChat.cid].$el.prependTo(this.$el);
+    }
+    this.chatViews[activeChat.cid].$el.show();
   },
   onKeyDown: function(event) {
     if (!this.activeChat) {
@@ -140,7 +199,6 @@ var ChatPane = Backbone.View.extend({
           },
           error: function() { debugger; },
           success: function(data) {
-            debugger;
           }
         });
         this.$input.val('');
@@ -151,5 +209,27 @@ var ChatPane = Backbone.View.extend({
 });
 
 var ChatsView = Backbone.View.extend({
-  el: $('#chats')
+  tagName: 'ul',
+  className: 'chats',
+  template: Handlebars.compile(
+    '<li class="msg">'+
+    '<span class="author">{{author}}</span>'+
+    '{{msg}}</li>'
+  ),
+  initialize: function(options) {
+    this.collection.on('reset', this.render, this);
+    this.collection.on('add', this.onAdd, this);
+    this.render();
+  },
+  render: function() {
+    this.$el.empty();
+    this.collection.each(this.onAdd, this);
+    return this;
+  },
+  onAdd: function(chat) {
+    $(this.template({
+      author: chat.get('author'),
+      msg: chat.get('msg')
+    })).hide().appendTo(this.$el).slideDown();
+  }
 });

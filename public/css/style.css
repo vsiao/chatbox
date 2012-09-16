@@ -91,18 +91,18 @@ a#addConversation:hover {
 
 /*----------------------------*/
 
-#chats {
+.chats {
   padding: 0 10px;
 }
 
-#chats .msg {
+.chats .msg {
   border-bottom: 1px solid #eee;
   display: block;
   margin-left: -5px;
   padding: 10px;
 }
 
-#chats .msg .author {
+.chats .msg .author {
   font-weight: 700;
   margin-right: 5px;
 }
