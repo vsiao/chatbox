@@ -13,6 +13,7 @@ module.exports = function(app) {
         chatsTable + req.body.chatName, 
         {author: name, msg: req.body.msg},
         function(err, stat){
+          console.log("CALLBACK!");
           res.send({status: 200, data: stat});
         }  
       );
