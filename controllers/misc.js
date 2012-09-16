@@ -1,5 +1,6 @@
 module.exports = function(app) {
   var dropboxdb = require('dropboxdb');
+  var util = require('../util');
 
   app.get('/', function(req, res) {
     dropboxdb.authenticate(function(error) {
@@ -10,6 +11,9 @@ module.exports = function(app) {
           var data = userInfo;
           data.conversations = [];
           res.render('app', data);
+        });
+        util.getChats(function(chats){
+          console.log(chats)
         });
       }
     });
