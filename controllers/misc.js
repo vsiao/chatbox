@@ -14,7 +14,6 @@ module.exports = function(app) {
             data.chats = JSON.stringify(_.map(chats, function(chatName) {
               return { name: chatName };
             }));
-            console.log(data.chats);
             res.render('app', data);
           });
         });

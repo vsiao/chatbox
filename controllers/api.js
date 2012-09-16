@@ -5,16 +5,16 @@ module.exports = function(app) {
   var name;
   var email;
 
-  /* Sends */
-  app.post('/api/send/:user', function(req, res) {
+  app.post('/api/send', function(req, res) {
     dropboxdb.userInfo(function(userInfo) {
       name = userInfo['name'];
       email = userInfo['email'];
-      console.log(req);
       dropboxdb.insert(
-        chatsTable, 
-        {from: email, to: req.params.user, msg: req.params.msg},
-        function(){}  
+        chatsTable + req.body.chatName, 
+        {author: name, msg: req.body.msg},
+        function(err, stat){
+          res.send({status: 200, data: stat});
+        }  
       );
     });
   });

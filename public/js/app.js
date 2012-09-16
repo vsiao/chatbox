@@ -36,8 +36,9 @@ var ChatboxApp = Backbone.View.extend({
     'click #conversations a': 'showChat'
   },
   initialize: function(options) {
+    this.name = options.name;
     this.$('#optionsPane').append('Logged in as ' + options.name);
-    this.chatPane = new ChatPane({collection: chats});
+    this.chatPane = new ChatPane({collection: chats, name: this.name});
     new ConversationsList({collection: chats});
     new AddConversation();
   },
@@ -100,16 +101,52 @@ var AddConversation = Backbone.View.extend({
   }
 });
 
+var _KEY_ENTER = 13;
 var ChatPane = Backbone.View.extend({
   el: $('#chatPane'),
+  events: {
+    'keydown #chatInput textarea': 'onKeyDown'
+  },
   initialize: function(options) {
+    this.author = options.name;
     this.collection.on('active:set', this.swapChat, this);
     this.chatsViewCollection = new Messages();
     this.chatsView = new ChatsView({collection: this.chatsViewCollection});
+    this.$input = this.$('#chatInput textarea');
+    /* FIXME NO ACTIVE CHAT SHH */
   },
   swapChat: function(activeChat) {
-    var msgs = activeChat.messages.fetch();
-    this.chatsViewCollection.reset(activeChat.messages);
+    this.chatsViewCollection.reset();
+    this.activeChat = activeChat;
+    var msgs = activeChat.messages.fetch(function(msgs) {
+      this.chatsViewCollection.reset(msgs);
+    });
+  },
+  onKeyDown: function(event) {
+    if (!this.activeChat) {
+      /* TODO: delete this when you fix no activechat view */
+      return;
+    }
+    if (event.which === _KEY_ENTER) {
+      var val = this.$input.val();
+      if (val !== '') {
+        $.ajax({
+          type: 'POST',
+          url: '/api/send',
+          data: {
+            author: this.author,
+            chatName: this.activeChat.get('name'),
+            msg: val
+          },
+          error: function() { debugger; },
+          success: function(data) {
+            debugger;
+          }
+        });
+        this.$input.val('');
+      }
+      event.preventDefault();
+    }
   }
 });
 
