@@ -1,4 +1,33 @@
-var chats = new Backbone.Collection();
+var Message = Backbone.Model.extend({
+});
+
+var Messages = Backbone.Collection.extend({
+  fetch: function() {
+  }
+});
+
+var Chat = Backbone.Model.extend({
+  initialize: function(attributes) {
+    this.messages = new Messages();
+  }
+});
+
+var Chats = Backbone.Collection.extend({
+  model: Chat,
+  activeCid: null,
+  setActiveCid: function(cid) {
+    if (this.activeCid) {
+      this.getActive().set('active', false);
+    }
+    this.getByCid(cid).set('active', true);
+    this.activeCid = cid;
+    this.trigger('active:set', this.getActive());
+  },
+  getActive: function() {
+    return this.getByCid(this.activeCid);
+  }
+});
+var chats = new Chats();
 
 var ChatboxApp = Backbone.View.extend({
   el: $('#chatboxApp'),
@@ -17,9 +46,9 @@ var ChatboxApp = Backbone.View.extend({
     this.$('#addConversationPane').fadeIn(300);
   },
   showChat: function(event) {
-    //this.chatPane.activate($(event.target).data('cid'));
+    chats.setActiveCid($(event.target).data('cid'));
     this.$('.main.pane').fadeOut(300);
-    this.$('#chatPane').fadeIn(300);
+    this.$('#chatPane').stop(true, true).fadeIn(300);
   }
 });
 
@@ -31,6 +60,7 @@ var ConversationsList = Backbone.View.extend({
   ),
   initialize: function(options) {
     this.collection.on('reset add', this.render, this);
+    this.collection.on('active:set', this.setActive, this);
   },
   render: function() {
     var conversations = [];
@@ -43,6 +73,11 @@ var ConversationsList = Backbone.View.extend({
     });
     this.$el.html(this.template({conversations:conversations}));
     return this;
+  },
+  setActive: function(activeChat) {
+    this.$('#conversations li').removeClass('active');
+    this.$('#conversations li a[data-cid='+activeChat.cid+']')
+      .closest('li').addClass('active');
   }
 });
 
@@ -66,6 +101,18 @@ var AddConversation = Backbone.View.extend({
 });
 
 var ChatPane = Backbone.View.extend({
-  el: $('#chatPane')
+  el: $('#chatPane'),
+  initialize: function(options) {
+    this.collection.on('active:set', this.swapChat, this);
+    this.chatsViewCollection = new Messages();
+    this.chatsView = new ChatsView({collection: this.chatsViewCollection});
+  },
+  swapChat: function(activeChat) {
+    var msgs = activeChat.messages.fetch();
+    this.chatsViewCollection.reset(activeChat.messages);
+  }
+});
 
+var ChatsView = Backbone.View.extend({
+  el: $('#chats')
 });

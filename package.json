@@ -3,18 +3,9 @@
   "version": "0.0.1",
   "description": "A chat client using the Dropbox API",
   "contributors": [
-    {
-      "name": "Norbert Chu",
-      "email": "nrchu@andrew.cmu.edu"
-    },
-    {
-      "name": "Vincent Siao",
-      "email": "vsiao@andrew.cmu.edu"
-    },
-    {
-      "name": "Peter Xiao",
-      "email": "phx@andrew.cmu.edu"
-    }
+    "Norbert Chu <nrchu@andrew.cmu.edu>",
+    "Vincent Siao <vsiao@andrew.cmu.edu>",
+    "Peter Xiao <phx@andrew.cmu.edu>"
   ],
   "repository": {
     "type": "git",
@@ -25,7 +16,8 @@
     "path": "0.4.x",
     "handlebars": "1.x",
     "consolidate": "0.3.x",
-    "dropboxdb": "0.0.x"
+    "dropboxdb": "0.0.x",
+    "lodash": "0.7.0"
 },
   "engines": {
     "node": ">=0.8",
