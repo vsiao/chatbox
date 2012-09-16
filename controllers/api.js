@@ -1,10 +1,11 @@
 module.exports = function(app) {
   var dropboxdb = require('dropboxdb');
 
-  var chatsTable = "chats";
+  var chatsTable = "chatbox-";
   var name;
   var email;
 
+  /* Sends */
   app.post('/api/send/:user', function(req, res) {
     dropboxdb.userInfo(function(userInfo) {
       name = userInfo['name'];
@@ -18,19 +19,28 @@ module.exports = function(app) {
     });
   });
 
-  /* TODO: a get that doesn't get all */
-  app.get('/api/get/:user', function(req, res) {
+  /* Gets all chats */
+  app.get('/api/get/:name/all', function(req, res) {
     dropboxdb.find(
-      chatsTable,
-      function(row) {return row["from"] === req.params.user || row["to"] === req.params.user},
-      function(lines) {res.send(lines)}
+      chatsTable + req.params.name,
+      function(row) { return true },
+      function(lines) { res.send(lines) }
+    );
+  });
+
+  /* Gets chats since the id*/
+  app.get('/api/get/:name/since/:id', function(req, res) {
+    dropboxdb.find(
+      chatsTable + req.params.name,
+      function(row) { return row['ID'] > req.params.id },
+      function(lines) { res.send(lines) }
     );
   });
 
   /** Creates a new chat */
   app.post('/api/create', function(req, res) {
     dropboxdb.create(
-      'chatbox-' + req.body.name,
+      chatsTable + req.body.name,
       null,
       function() {}
     );

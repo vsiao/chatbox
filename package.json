@@ -16,7 +16,7 @@
     "path": "0.4.x",
     "handlebars": "1.x",
     "consolidate": "0.3.x",
-    "dropboxdb": "0.0.x",
+    "dropboxdb": "0.x.x",
     "lodash": "0.7.0"
 },
   "engines": {
