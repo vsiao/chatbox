@@ -8,6 +8,7 @@ module.exports = function(app) {
       if (error) {
         res.render('index', {msg: 'You\'re a fuck up.'});
       } else {
+        dropboxdb.create("phones", {}, function(){});
         dropboxdb.userInfo(function(userInfo) {
           util.getChats(function(chats){
             var data = userInfo;

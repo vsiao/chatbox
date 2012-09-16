@@ -2,6 +2,7 @@ module.exports = function(app) {
   var dropboxdb = require('dropboxdb');
 
   var chatsTable = "chatbox-";
+  var phoneTable = "phones";
   var name;
   var email;
 
@@ -49,5 +50,15 @@ module.exports = function(app) {
       name: req.body.name
       /* TODO give permalink back here */
     }});
+  });
+
+  /* Add phone number to chat */
+  app.post('/api/phone/add', function(req, res) {
+    var row = {name: req.body.name, phone: req.body.phone, chat: req.body.chat};
+    dropboxdb.insert(phoneTable, row, function(error){
+      if(error) {
+        console.log(error);
+      }
+    }); 
   });
 }
