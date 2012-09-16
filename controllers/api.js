@@ -26,7 +26,13 @@ module.exports = function(app) {
     dropboxdb.find(
       chatsTable + req.params.name,
       function(row) { return true },
-      function(lines) { res.send(lines) }
+      function(err, lines) {
+        if (err) {
+          res.send(500, err);
+        } else {
+          res.send(200, lines);
+        }
+      }
     );
   });
 
@@ -35,7 +41,13 @@ module.exports = function(app) {
     dropboxdb.find(
       chatsTable + req.params.name,
       function(row) { return row['ID'] > req.params.id },
-      function(lines) { res.send(lines) }
+      function(err, lines) {
+        if (err) {
+          res.send(500, err);
+        } else {
+          res.send(200, lines);
+        }
+      }
     );
   });
 

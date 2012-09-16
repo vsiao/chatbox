@@ -10,7 +10,8 @@ module.exports = function(app) {
       } else {
         dropboxdb.create("phones", {}, function(){});
         dropboxdb.userInfo(function(userInfo) {
-          util.getChats(function(chats){
+          util.getChats(function(error, chats){
+            chats = chats || [];
             var data = userInfo;
             data.chats = JSON.stringify(_.map(chats, function(chatName) {
               return { name: chatName };
